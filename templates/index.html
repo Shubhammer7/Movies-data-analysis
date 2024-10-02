@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations</title>
+</head>
+<body>
+    <h1>Movie Recommendations</h1>
+    <form method="post">
+        <label for="movie_title">Enter a movie title:</label>
+        <input type="text" name="movie_title" required>
+        <input type="submit" value="Get Recommendations">
+    </form>
+
+    {% if recommendations.empty %}
+        <p>No recommendations found. Please try another movie title.</p>
+    {% else %}
+        <h2>Recommended Movies:</h2>
+        <ul>
+            {% for index, movie in recommendations.iterrows() %}
+                <li>{{ movie['title'] }}</li>  <!-- Adjust based on your DataFrame structure -->
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

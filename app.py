@@ -1,19 +1,22 @@
-from flask import Flask, render_template, request
-import pandas as pd
-from recommendations import get_recommendations, generate_similarity
+from flask import Flask, request, render_template
+import model  # Import model.py as a module
+
 app = Flask(__name__)
 
-# Load your dataset
-df_recommendation = pd.read_csv('tmdb_5000_movies.csv')
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/', methods=['GET', 'POST'])
+# Home route
+@app.route('/')
 def home():
-    recommendations = pd.DataFrame()  # Initialize as an empty DataFrame
-    if request.method == 'POST':
-        title = request.form['movie_title']
-        recommendations = get_recommendations(title, df_recommendation, cosine_sim)  # Pass the DataFrame and cosine_sim
-    return render_template('index.html', recommendations=recommendations)
+    return render_template('index.html')
 
-if __name__ == '__main__':
+# Recommendations route
+@app.route('/recommend', methods=['GET'])
+def recommend():
+    title = request.args.get('title')  # Get the movie title from the form
+    if title:
+        recommendations = model.get_recommendations(title)  # Call the function from model.py
+        return render_template('index.html', recommendations=recommendations)
+    return render_template('index.html', recommendations=[])
+
+if __name__ == "__main__":
     app.run(debug=True)
+
